@@ -13,7 +13,7 @@ func main() {
 		fmt.Print(input)
 		fmt.Print("=")
 	}
-	result, err := Solve(input)
+	result, err := Separate(input)
 	if err != nil {
 		fmt.Println(err)
 		return
