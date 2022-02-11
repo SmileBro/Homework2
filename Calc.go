@@ -8,240 +8,100 @@ import (
 
 func Solve(input string) (result float64, err error) {
 
-	//f1 := func(c rune) bool { return !(c == 45) && !(c == 43) }
-	f1 := func(c rune) bool { return !(c == 43) }
-	//f2 := func(c rune) bool { return (c == 45) || (c == 43) }
-	f2 := func(c rune) bool { return c == 43 }
+	f1 := func(c rune) bool { return c == 43 }
+
+	//f2 := func(c rune) bool { return !unicode.IsNumber(c) }
 	s1 := strings.FieldsFunc(input, f1)
-	s2 := strings.FieldsFunc(input, f2)
+	//s2 := strings.FieldsFunc(input, f2)
 	fmt.Println(s1)
-	fmt.Println(s2)
-	s3 := make([]string, len(s2))
-	for i, v := range s2 {
-		temp, err1 := Exp(v)
+	//fmt.Println(s2)
+
+	for _, v := range s1 {
+		out, err1 := ExpMinus(v)
 		if err1 != nil {
 			err = err1
 			return
 		}
-		s3[i] = temp
-
+		result = result + out
 	}
-	fmt.Println(s3)
+	return
+
+}
+func ExpMinus(input string) (result float64, err error) {
+
+	f1 := func(c rune) bool { return c == 45 }
+	//f2 := func(c rune) bool { return !unicode.IsNumber(c) }
+	s1 := strings.FieldsFunc(input, f1)
+	//s2 := strings.FieldsFunc(input, f2)
+	fmt.Println(s1)
+	//fmt.Println(s2)
+
 	flag := true
-	if len(s1) > 0 {
-		for i, v := range s1 {
-			if flag {
-				flag = false
-				switch v {
-				case "-":
-					{
-						t1, err1 := strconv.ParseFloat(s3[i], 64)
-						if err1 != nil {
-							err = err1
-							return
-						}
-						t2, err1 := strconv.ParseFloat(s3[i+1], 64)
-						if err1 != nil {
-							err = err1
-							return
-						}
-						result = t1 - t2
-					}
-				case "+":
-					{
-						t1, err1 := strconv.ParseFloat(s3[i], 64)
-						if err1 != nil {
-							err = err1
-							return
-						}
-						t2, err1 := strconv.ParseFloat(s3[i+1], 64)
-						if err1 != nil {
-							err = err1
-							return
-						}
-						result = t1 + t2
-					}
-
-				}
-			} else {
-				if i != len(s1) {
-					switch v {
-					case "-":
-						{
-							t1, err1 := strconv.ParseFloat(s3[i+1], 64)
-							if err1 != nil {
-								err = err1
-								return
-							}
-
-							result = result - t1
-						}
-					case "+":
-						{
-							t1, err1 := strconv.ParseFloat(s3[i+1], 64)
-							if err1 != nil {
-								err = err1
-								return
-							}
-
-							result = result + t1
-						}
-
-					}
-				}
+	for _, v := range s1 {
+		if flag {
+			flag = false
+			temp, err1 := ExpMult(v)
+			if err1 != nil {
+				err = err1
+				return
 			}
+			result = temp
+		} else {
+			temp, err1 := ExpMult(v)
+			if err1 != nil {
+				err = err1
+				return
+			}
+			result = result - temp
 		}
-	} else {
-		t2, err1 := strconv.ParseFloat(s3[0], 64)
+	}
+	return
+}
+func ExpMult(input string) (result float64, err error) {
+	f1 := func(c rune) bool { return c == 42 }
+	//f2 := func(c rune) bool { return !unicode.IsNumber(c) }
+	s1 := strings.FieldsFunc(input, f1)
+	//s2 := strings.FieldsFunc(input, f2)
+	fmt.Println(s1)
+	//fmt.Println(s2)
+	result = 1.0
+	for _, v := range s1 {
+		out, err1 := ExpDiv(v)
 		if err1 != nil {
 			err = err1
 			return
 		}
-		result = t2
+		result = result * out
 	}
 	return
-
 }
-func Exp(s string) (line string, err error) {
-	var result float64
+func ExpDiv(input string) (result float64, err error) {
+	f1 := func(c rune) bool { return c == 47 }
+	//f2 := func(c rune) bool { return !unicode.IsNumber(c) }
+	s1 := strings.FieldsFunc(input, f1)
+	//s2 := strings.FieldsFunc(input, f2)
+	fmt.Println(s1)
+	//fmt.Println(s2)
 
-	if strings.Contains(s, "-") {
-		buf := strings.Split(s, "-")
-		fmt.Println(buf)
-		if buf[0] == "" {
-			result1, err1 := strconv.ParseFloat(buf[1], 64)
+	flag := true
+	for _, v := range s1 {
+		if flag {
+			flag = false
+			temp, err1 := strconv.ParseFloat(s1[0], 64)
 			if err1 != nil {
 				err = err1
 				return
 			}
-			result = result1
+			result = temp
 		} else {
-			result1, err1 := strconv.ParseFloat(buf[0], 64)
+			temp, err1 := strconv.ParseFloat(v, 64)
 			if err1 != nil {
 				err = err1
 				return
 			}
-			result = result1
-		}
-
-		for i, v := range buf {
-			if i != 0 {
-				temp, err1 := Expresion(v)
-				if err1 != nil {
-					err = err1
-					return
-				}
-				result = result - temp
-			}
-		}
-
-	} else {
-		if strings.Contains(s, "*") {
-			result = 1.0
-			temp := strings.Split(s, "*")
-			for _, v := range temp {
-				buf, err1 := Exp(v)
-				if err1 != nil {
-					err = err1
-					return
-				}
-				t1, err1 := strconv.ParseFloat(buf, 64)
-				if err1 != nil {
-					err = err1
-					return
-				}
-				result = result * t1
-			}
-		} else {
-			if strings.Contains(s, "/") {
-				result = 1.0
-				flag := true
-				temp := strings.Split(s, "/")
-				for _, v := range temp {
-					buf, err1 := Exp(v)
-					if err1 != nil {
-						err = err1
-						return
-					}
-					t1, err1 := strconv.ParseFloat(buf, 64)
-					if err1 != nil {
-						err = err1
-						return
-					}
-					if flag {
-						flag = false
-						result = t1
-					} else {
-						result = result / t1
-					}
-				}
-			} else {
-				_, err1 := strconv.ParseFloat(s, 64)
-				if err1 != nil {
-					err = err1
-					fmt.Println("Неправильное выражение")
-					return
-				}
-				line = s
-				return
-			}
+			result = result / temp
 		}
 	}
 
-	line = fmt.Sprintf("%v", result)
-	return
-}
-func Expresion(s string) (result float64, err error) {
-	if strings.Contains(s, "*") {
-		result = 1.0
-		temp := strings.Split(s, "*")
-		for _, v := range temp {
-			buf, err1 := Exp(v)
-			if err1 != nil {
-				err = err1
-				return
-			}
-			t1, err1 := strconv.ParseFloat(buf, 64)
-			if err1 != nil {
-				err = err1
-				return
-			}
-			result = result * t1
-		}
-	} else {
-		if strings.Contains(s, "/") {
-			result = 1.0
-			flag := true
-			temp := strings.Split(s, "/")
-			for _, v := range temp {
-				buf, err1 := Exp(v)
-				if err1 != nil {
-					err = err1
-					return
-				}
-				t1, err1 := strconv.ParseFloat(buf, 64)
-				if err1 != nil {
-					err = err1
-					return
-				}
-				if flag {
-					flag = false
-					result = t1
-				} else {
-					result = result / t1
-				}
-			}
-		} else {
-			result1, err1 := strconv.ParseFloat(s, 64)
-			if err1 != nil {
-				err = err1
-				fmt.Println("Неправильное выражение")
-				return
-			}
-			result = result1
-			return
-
-		}
-	}
 	return
 }
