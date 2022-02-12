@@ -13,7 +13,7 @@ func Solve(input string) (line string, err error) {
 	//f2 := func(c rune) bool { return !unicode.IsNumber(c) }
 	s1 := strings.FieldsFunc(input, f1)
 	//s2 := strings.FieldsFunc(input, f2)
-	fmt.Println(s1)
+	//fmt.Println(s1)
 	//fmt.Println(s2)
 
 	for _, v := range s1 {
@@ -35,7 +35,7 @@ func ExpMult(input string) (result float64, err error) {
 	s1 := strings.FieldsFunc(input, f1)
 	//s2 := strings.FieldsFunc(input, f2)
 	//fmt.Println(input)
-	fmt.Println(s1)
+	//fmt.Println(s1)
 	//fmt.Println(s2)
 	result = 1.0
 	for _, v := range s1 {
@@ -53,7 +53,7 @@ func ExpDiv(input string) (result float64, err error) {
 	//f2 := func(c rune) bool { return !unicode.IsNumber(c) }
 	s1 := strings.FieldsFunc(input, f1)
 	//s2 := strings.FieldsFunc(input, f2)
-	fmt.Println(s1)
+	//fmt.Println(s1)
 	//fmt.Println(s2)
 
 	flag := true

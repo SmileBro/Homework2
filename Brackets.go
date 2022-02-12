@@ -10,7 +10,7 @@ func Separate(input string) (result string, err error) {
 	if strings.Contains(input, "(") {
 		b1 := strings.Count(input, "(")
 		b2 := strings.Count(input, ")")
-		if b1 != b2 {
+		if b1 != b2 || strings.Contains(input, "-+") {
 			fmt.Println("Неправильный ввод")
 			return
 		}
