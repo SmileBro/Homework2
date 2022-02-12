@@ -38,8 +38,9 @@ func Calculate(input string) (result string, err error) {
 			break
 		}
 	}
+
 	output, err = Solve(input[i+1 : j])
 	result = input[0:i] + output + input[j+1:]
-	//fmt.Println(result)
+
 	return
 }
